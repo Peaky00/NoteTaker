@@ -1,0 +1,22 @@
+# Node.js related
+node_modules/
+npm-debug.log
+
+# Operating System related
+.DS_Store
+Thumbs.db
+
+# IDE related
+.vscode/
+.idea/
+
+# Temporary files
+*.temp
+*.tmp
+
+# Logs
+logs/
+*.log
+
+# Other
+.env
