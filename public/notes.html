@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notes</title>
+  <link rel="stylesheet" type="text/css" href="./assets/css/styles.css"> <!-- Link to the external CSS file -->
+</head>
+<body>
+  <header>
+    <h1>Your Notes</h1>
+  </header>
+  
+  <main>
+    <section>
+      <!-- List of existing notes will be displayed here -->
+      <ul id="note-list">
+        <!-- Saved notes will appear here dynamically -->
+      </ul>
+    </section>
+
+    <section>
+      <h2>Add a New Note</h2>
+      <form id="note-form">
+        <input type="text" id="note-title" placeholder="Note Title">
+        <textarea id="note-text" placeholder="Write your note here"></textarea>
+        <button type="submit">Save Note</button>
+        <button type="button" id="clear-form">Clear Form</button> <!-- Add the Clear Form button -->
+      </form>
+    </section>
+  </main>
+  
+  <!-- JavaScript code for fetching and displaying notes -->
+  <script src="./assets/js/notes.js"></script> <!-- Include your JavaScript file here -->
+</body>
+</html>
