@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-   <link rel="stylesheet" href="./assets/css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./assets/css/styles.css">
+  <title>My Note App</title>
 </head>
 <body>
-    <header>
-        <h1>Notes</h1>
-    
-    
+  <div class="form-container">
+    <input type="text" id="note-title-input" placeholder="Note Title">
+    <textarea id="note-text-input" placeholder="Note Text"></textarea>
+    <button id="add-note-button">New Note</button>
+    <button id="clear-form-button">Clear Form</button>
+  </div>
 
-    <!-- Form to create a new note -->
-    <form id="noteForm">
-        <input type="text" id="noteText" placeholder="Enter your note" required>
-        <button type="submit">Add Note</button>
-        <button type="button" id="clearForm">Clear Form</button>
-    </form>
-</header>
+  <div class="main-container">
+    <div class="note-container">
+  <ul id="notes-list">
+    <!-- Saved note titles and texts will be displayed here -->
+  </ul>
+</div>
+    <div class="selected-note-container">
+      <h2>Selected Note</h2>
+      <div id="selected-note-title"></div>
+      <div id="selected-note-text"></div>
+    </div>
+  </div>
 
-    <!-- Section to display existing notes -->
-    <section id="noteList">
-        <!-- Notes will be displayed here -->
-    </section>
-
-    <script src="notes.js"></script>
+  <script src="notes.js"></script>
 </body>
 </html>
