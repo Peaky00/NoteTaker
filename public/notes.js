@@ -1,87 +1,117 @@
-// Get references to HTML elements
-const noteForm = document.getElementById('noteForm');
-const noteText = document.getElementById('noteText');
-const noteList = document.getElementById('noteList');
+// Function to add a note to the server
+function addNote() {
+  const noteTitleInput = document.getElementById('note-title-input');
+  const noteTextInput = document.getElementById('note-text-input');
 
-// Function to fetch and display existing notes
-// Function to fetch and display existing notes
-async function displayNotes() {
-    const response = await fetch('/api/notes');
-    const notes = await response.json();
-  
-    // Clear the note list
-    noteList.innerHTML = '';
-  
-    // Display each note with a trash can icon
-    notes.forEach((note) => {
-        const noteItem = document.createElement('div');
-        noteItem.classList.add('note-item');
-        noteItem.innerHTML = `
-          <div>${note.text}</div>
-          <button class="delete-note" data-note-id="${note.id}">
-            <i class="fas fa-trash"></i> <!-- FontAwesome trash can icon -->
-          </button>
-        `;
-      
-        // Add a click event listener to the trash can icon button
-        const deleteButton = noteItem.querySelector('.delete-note');
-        deleteButton.addEventListener('click', deleteNote);
-      
-        noteList.appendChild(noteItem);
+  const noteTitle = noteTitleInput.value.trim();
+  const noteText = noteTextInput.value.trim();
+
+  if (noteTitle !== '' && noteText !== '') {
+    const newNote = {
+      title: noteTitle,
+      text: noteText,
+    };
+
+    fetch('/api/notes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newNote),
+    })
+      .then((response) => response.json())
+      .then((addedNote) => {
+        // Handle the response from the server
+        console.log('Added note:', addedNote);
+
+        // Clear the input fields
+        noteTitleInput.value = '';
+        noteTextInput.value = '';
+
+        // Update the button
+        updateButton();
+
+        // Fetch and display the updated notes list
+        fetchNotes();
+      })
+      .catch((error) => {
+        console.error('Error adding note:', error);
       });
-      
   }
-  
-  // Function to handle deleting a note
-  async function deleteNote(e) {
-    const noteId = e.target.dataset.noteId;
-    console.log('Note ID to delete:', noteId); 
-  
-    // Send a DELETE request to delete the note by ID
-    const response = await fetch(`/api/notes/${noteId}`, {
-      method: 'DELETE',
+}
+
+// Function to fetch and display saved notes
+function fetchNotes() {
+  fetch('/api/notes')
+    .then((response) => response.json())
+    .then((notes) => {
+      // Handle the response from the server
+      console.log('Fetched notes:', notes);
+
+      // Display the saved notes in the notes list
+      const notesList = document.getElementById('notes-list');
+      notesList.innerHTML = '';
+
+      for (const note of notes) {
+        if (note) { // Check if the note object is not null
+          const li = document.createElement('li');
+          const title = note.title || 'No Title'; // Default to 'No Title' if title is missing
+          const text = note.text || 'No Text';     // Default to 'No Text' if text is missing
+          li.innerHTML = `<strong>${title}</strong><br>${text}`;
+
+          // Add a click event listener to each note item
+          li.addEventListener('click', () => {
+            displaySelectedNote(note);
+          });
+
+          notesList.appendChild(li);
+        }
+      }
+    })
+    .catch((error) => {
+      console.error('Error fetching notes:', error);
     });
-  
-    if (response.ok) {
-      // Refresh the displayed notes after deleting
-      displayNotes();
-    } else {
-      console.error('Failed to delete note.');
-    }
-  }
-  
-  // ... Other code for form submission, clearing form, and initial display
-  
-  // Initial display of existing notes
-  displayNotes();
-  
+}
 
-// Event listener for form submission
-noteForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
+// Function to display a selected note (title and text)
+function displaySelectedNote(selectedNote) {
+  const selectedNoteTitleContainer = document.getElementById('selected-note-title');
+  const selectedNoteTextContainer = document.getElementById('selected-note-text');
 
-  const newNote = {
-    text: noteText.value,
-  };
+  selectedNoteTitleContainer.innerHTML = `<strong>Note Title:</strong> ${selectedNote.title}`;
+  selectedNoteTextContainer.innerHTML = `<strong>Note Text:</strong> ${selectedNote.text}`;
+}
 
-  // Send a POST request to add the new note
-  const response = await fetch('/api/notes', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(newNote),
-  });
+// Function to update the button text and behavior
+function updateButton() {
+  const noteTitleInput = document.getElementById('note-title-input');
+  const noteTextInput = document.getElementById('note-text-input');
+  const addNoteButton = document.getElementById('add-note-button');
 
-  if (response.ok) {
-    // Clear the input field
-    noteText.value = '';
-    // Refresh the displayed notes
-    displayNotes();
+  if (noteTitleInput.value.trim() !== '' && noteTextInput.value.trim() !== '') {
+    addNoteButton.textContent = 'Clear Form';
+    addNoteButton.onclick = clearForm;
   } else {
-    console.error('Failed to add note.');
+    addNoteButton.textContent = 'New Note';
+    addNoteButton.onclick = addNote;
   }
-});
+}
 
-// Initial display of existing notes
-displayNotes();
+// Function to clear the form
+function clearForm() {
+  const noteTitleInput = document.getElementById('note-title-input');
+  const noteTextInput = document.getElementById('note-text-input');
+
+  noteTitleInput.value = '';
+  noteTextInput.value = '';
+
+  // Update the button text and behavior after clearing the form
+  updateButton();
+}
+
+// Attach event listener to the "New Note" button
+document.getElementById('add-note-button').addEventListener('click', addNote);
+document.getElementById('clear-form-button').addEventListener('click', clearForm);
+
+// Call the fetchNotes function to display saved notes when the page loads
+fetchNotes();
