@@ -47,6 +47,10 @@ Contributions to the Note Taker App are welcome! Feel free to fork this reposito
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
+## Screenshots
+![First Page](image-1.png)
+![Second Page](image-2.png)
+
 ## Acknowledgments
 This app was created by Chris Kirkley.
 Happy note-taking!
