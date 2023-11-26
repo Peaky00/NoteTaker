@@ -3,14 +3,13 @@ const router = express.Router();
 const notesRoutes = require('./routes/notesRoutes');
 
 // Define HTML routes
-router.get('/notes', (req, res) => {
-  // Return the notes.html file
-  res.sendFile(__dirname + '/public/notes.html');
+app.get('/notes', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'notes.html'));
 });
 
 router.get('*', (req, res) => {
   // Return the index.html file for all other routes
-  res.sendFile(__dirname + '/public/index.html');
+  res.sendFile(__dirname + '/public/index.html'); // Corrected path
 });
 
 // Define API routes
